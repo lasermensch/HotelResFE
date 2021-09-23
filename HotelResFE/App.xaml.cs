@@ -1,4 +1,4 @@
-﻿using HotelReservationFE.Views;
+﻿using HotelResFE.Views;
 using Prism.Ioc;
 using Prism.Regions;
 using Prism.Unity;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace HotelReservationFE
+namespace HotelResFE
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -35,8 +35,9 @@ public partial class App : PrismApplication
             base.OnInitialized();
             var regionManager = Container.Resolve<IRegionManager>();
             var contentRegion = regionManager.Regions["ContentRegion"];
-            var homeView = Container.Resolve<Login>();
-            
+            var loginView = Container.Resolve<Login>();
+
+            contentRegion.Add(loginView);
         }
     }
 }
