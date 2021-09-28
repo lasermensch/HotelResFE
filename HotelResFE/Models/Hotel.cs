@@ -6,7 +6,20 @@ using System.Threading.Tasks;
 
 namespace HotelResFE.Models
 {
-    class Hotel
-    {
+    public class Hotel
+    {   public Guid HotelId { get; set; }
+     
+        public string HotelName { get; set; }
+     
+        public string Adress { get; set; }
+     
+        public string Email { get; set; }
+     
+        public string PhoneNr { get; set; }
+        public string WebPage { get; set; }
+
+        //Navprops
+        public ICollection<Room> Rooms { get; set; }
+        public ICollection<HotelImage> Images { get; set; }
     }
 }

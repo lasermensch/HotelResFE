@@ -4,7 +4,7 @@
         xmlns:prism="http://prismlibrary.com/"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        xmlns:local="clr-namespace:HotelResFE"
+        xmlns:local="clr-namespace:HotelResFE.Views"
         
         Title="MainWindow" Height="450" Width="800">
     <Grid>

@@ -1,5 +1,4 @@
-﻿using HotelResFE.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,25 +16,13 @@ using System.Windows.Shapes;
 namespace HotelResFE.Views
 {
     /// <summary>
-    /// Interaction logic for Login.xaml
+    /// Interaction logic for Hotels.xaml
     /// </summary>
-    public partial class Login : UserControl
+    public partial class Hotels : UserControl
     {
-        private string _pwd;
-        public string Pwd
-        {
-            get { return _pwd; }
-        }
-        public Login()
+        public Hotels()
         {
             InitializeComponent();
-        }
-
-        private void tbxPassword_LostFocus(object sender, RoutedEventArgs e)
-        {
-            
-            _pwd = tbxPassword.Password;
-
         }
     }
 }

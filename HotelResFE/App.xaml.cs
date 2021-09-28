@@ -1,4 +1,5 @@
-﻿using HotelResFE.Views;
+﻿using HotelResFE.DataServices;
+using HotelResFE.Views;
 using Prism.Ioc;
 using Prism.Regions;
 using Prism.Unity;
@@ -27,7 +28,9 @@ public partial class App : PrismApplication
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterScoped<ILoginService, LoginService>();
             
+            containerRegistry.RegisterForNavigation<Login>();
         }
 
         protected override void OnInitialized()
