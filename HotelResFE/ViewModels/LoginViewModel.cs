@@ -7,7 +7,9 @@ using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,13 +28,13 @@ namespace HotelResFE.ViewModels
 
         public string Username
         {
-            get { return _username; }
+            //get {return ""}
             set { SetProperty(ref _username, value); PostLoginCommand.RaiseCanExecuteChanged(); }
         }
         public string Password
         {
-            get { return _password; }
-            set { SetProperty(ref _password, value: Login.Pwd); PostLoginCommand.RaiseCanExecuteChanged(); }
+            //get { return "*****************"; }
+            set { SetProperty(ref _password, Garble(value)); PostLoginCommand.RaiseCanExecuteChanged(); }
         }
 
         public LoginViewModel(ILoginService service, IEventAggregator aggregator)
@@ -71,6 +73,29 @@ namespace HotelResFE.ViewModels
                 canDo = false;
 
             return canDo;
+        }
+
+        private string Garble(string secret) 
+        {
+            byte[] toEncryptArray = UTF8Encoding.UTF8.GetBytes(secret);
+            Byte[] resultArray = null;
+            try { 
+            using (TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider())
+            {
+                byte[] keyArray = UTF8Encoding.UTF8.GetBytes("q3t6w9z$C&E)H@Mc");
+                tdes.Key = keyArray;
+                tdes.Mode = CipherMode.ECB;
+                tdes.Padding = PaddingMode.PKCS7;
+                ICryptoTransform cTransform = tdes.CreateEncryptor();
+                resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+            }
+
+        }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
         }
     }
 

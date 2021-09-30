@@ -1,5 +1,4 @@
-﻿using HotelResFE.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,22 +16,13 @@ using System.Windows.Shapes;
 namespace HotelResFE.Views
 {
     /// <summary>
-    /// Interaction logic for Login.xaml
+    /// Interaction logic for UserDetails.xaml
     /// </summary>
-    public partial class Login : UserControl
+    public partial class UserDetails : UserControl
     {
-        
-        public Login()
+        public UserDetails()
         {
             InitializeComponent();
-        }
-
-        
-
-        private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = false;
-            e.Handled = true;
         }
     }
 }

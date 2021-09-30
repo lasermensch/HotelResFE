@@ -29,8 +29,10 @@ public partial class App : PrismApplication
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterScoped<ILoginService, LoginService>();
-            
+            containerRegistry.RegisterScoped<IHotelsService, HotelsService>();
+
             containerRegistry.RegisterForNavigation<Login>();
+            containerRegistry.RegisterForNavigation<Hotels>();
         }
 
         protected override void OnInitialized()
@@ -38,9 +40,13 @@ public partial class App : PrismApplication
             base.OnInitialized();
             var regionManager = Container.Resolve<IRegionManager>();
             var contentRegion = regionManager.Regions["ContentRegion"];
+            var hotelsview = Container.Resolve<Hotels>();
             var loginView = Container.Resolve<Login>();
 
             contentRegion.Add(loginView);
+            contentRegion.Add(hotelsview);
+            
+            
         }
     }
 }
