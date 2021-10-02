@@ -25,7 +25,6 @@
                     <DataTemplate>
                         <Border BorderThickness="1" BorderBrush="Black" Background="AliceBlue" Width="100" Height="100">
                             <Image Source="{Binding Uri}"/>
-                            <!--<TextBlock Text="{Binding Uri}" TextWrapping="Wrap"/>-->
                         </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

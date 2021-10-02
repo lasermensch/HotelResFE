@@ -5,6 +5,7 @@
     xmlns:local="clr-namespace:HotelResFE"
     xmlns:prism="http://prismlibrary.com/">
     <Application.Resources>
+        <FontFamily x:Key="PassStar">Resources\Fonts\PassStar-ext.ttf#PassStar</FontFamily>
     </Application.Resources>
 </prism:PrismApplication>
 

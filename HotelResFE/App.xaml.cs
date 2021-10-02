@@ -22,8 +22,8 @@ public partial class App : PrismApplication
     {
         protected override Window CreateShell()
         {
-            var w = Container.Resolve<MainWindow>();
-            return w;
+            return Container.Resolve<MainWindow>();
+            
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -42,7 +42,7 @@ public partial class App : PrismApplication
             var contentRegion = regionManager.Regions["ContentRegion"];
             var hotelsview = Container.Resolve<Hotels>();
             var loginView = Container.Resolve<Login>();
-
+            
             contentRegion.Add(loginView);
             contentRegion.Add(hotelsview);
             

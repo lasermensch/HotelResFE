@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Fonts\PassStar-ext.ttf" />
+    <None Remove="Resources\Icons\user-solid.png" />
+    <None Remove="Resources\Icons\user-solid.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="prism.unity" Version="8.1.97" />
   </ItemGroup>
@@ -21,6 +27,16 @@
 
   <ItemGroup>
     <Folder Include="Wrappers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Icons\user-solid.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Fonts\PassStar-ext.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Resources\Icons\user-solid.svg" />
   </ItemGroup>
 
 </Project>

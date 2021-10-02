@@ -18,19 +18,31 @@ namespace HotelResFE.DataServices
         {
             _client = client;
         }
-        public Task<Hotel> GetHotelByIdAsync()
+        public async Task<Hotel> GetHotelByIdAsync(string hotelId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var response = await _client.GetAsync($"https://localhost:44364/api/hotels/{hotelId}");
+                if(response.StatusCode == HttpStatusCode.OK)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    Hotel h = JsonConvert.DeserializeObject<Hotel>(content);
+                    return h;
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+
+            return null;
         }
 
         public async Task<IEnumerable<Hotel>> GetHotelsAsync()
         {
             try
             {
-
-                
-
-                
                 var response = await _client.GetAsync("https://localhost:44364/api/hotels");
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -38,14 +50,11 @@ namespace HotelResFE.DataServices
 
                     IEnumerable<Hotel> hotels = JsonConvert.DeserializeObject<IEnumerable<Hotel>>(content);
                     return hotels;
-                }
-
-                
+                }   
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                
             }
             return null;
         }

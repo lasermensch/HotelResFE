@@ -7,7 +7,7 @@ namespace HotelResFE.DataServices
     public interface IHotelsService
     {
         public Task<IEnumerable<Hotel>> GetHotelsAsync();
-        public Task<Hotel> GetHotelByIdAsync();
+        public Task<Hotel> GetHotelByIdAsync(string hotelId);
         public Task PostHotelAsync();
 
 

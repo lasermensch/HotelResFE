@@ -13,6 +13,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace HotelResFE.ViewModels
 {
@@ -31,6 +32,7 @@ namespace HotelResFE.ViewModels
             //get {return ""}
             set { SetProperty(ref _username, value); PostLoginCommand.RaiseCanExecuteChanged(); }
         }
+       
         public string Password
         {
             //get { return "*****************"; }
