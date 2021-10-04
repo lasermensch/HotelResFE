@@ -7,6 +7,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <DatePicker Name="datePickerWithBlackoutDates"
+            DisplayDateStart="{Binding StartDate}"
+            DisplayDateEnd="{Binding EndDate}"
+            SelectedDate="{Binding SelectedDate}">
+            <DatePicker.BlackoutDates>
+                <CalendarDateRange Start="8/1/09" End="8/2/09"/>
+                <CalendarDateRange Start="8/8/09" End="8/9/09"/>
+                <CalendarDateRange Start="8/15/09" End="8/16/09"/>
+                <CalendarDateRange Start="8/22/09" End="8/23/09"/>
+                <CalendarDateRange Start="8/29/09" End="8/30/09"/>
+            </DatePicker.BlackoutDates>
+        </DatePicker>
     </Grid>
 </UserControl>

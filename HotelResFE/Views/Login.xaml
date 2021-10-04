@@ -16,15 +16,17 @@
             <Label Content="Username"/>
             <TextBox Text="{Binding Username, Mode=TwoWay}" />
             <Label Content="Password"/>
-            <TextBox Name="tbxPassword" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
-                     FontFamily="pack://application:,,,/Resources/Fonts/#PassStar" Visibility="Visible">
-                <TextBox.CommandBindings> <!--Tills vidare får det väl duga...-->
+            <TextBox  Name="tbxPassword" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                     FontFamily="pack://application:,,,/Resources/Fonts/#PassStar" Visibility="Visible" FontSize="20" Height="17.96">
+                <TextBox.CommandBindings>
+                    <!--Tills vidare får det väl duga...-->
                     <CommandBinding Command="ApplicationCommands.Copy" CanExecute="CommandBinding_CanExecute"/>
                     <CommandBinding Command="ApplicationCommands.Cut" CanExecute="CommandBinding_CanExecute" />
+                    
                 </TextBox.CommandBindings>
             </TextBox>
-            <TextBlock Name="tbkTest" Text="ABCDEF!" FontFamily="pack://application:,,,/Resources/Fonts/#PassStar"  Height="40" Background="white" FontSize="20"></TextBlock>
-            <Glyphs UnicodeString="ABC123!" FontUri="C:\Users\stene\OneDrive\Documents\Skolarbete\systemutveckling\Slutuppgift\ikoner\Passstar-Regular.ttf" />
+            
+
 
             <Button Margin="20" Content="Log In" Command="{Binding PostLoginCommand}"></Button>
         </StackPanel>

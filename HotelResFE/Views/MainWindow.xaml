@@ -14,12 +14,12 @@
             <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Width="60" Visibility="{Binding ToggleUserpageBtnVisibility}" ClipToBounds="True" BorderBrush="#00707070" Background="Transparent">
+            <Button Width="60" Command="{Binding NavigateToUserDetailsView}" CommandParameter="UserDetails" Visibility="{Binding ToggleUserpageBtnVisibility}" ClipToBounds="True" BorderBrush="#00707070" Background="Transparent">
                 <Image Source="../Resources/Icons/user-solid.png" />
             </Button>
 
-            <Button Content="Log in" Visibility="{Binding ToggleLoginBtnVisibility}" Background="#00DDDDDD" BorderBrush="#00707070"/>
-            <Button Content="Register" Visibility="{Binding ToggleLoginBtnVisibility}" Background="#00DDDDDD" BorderBrush="#00707070" />
+            <Button Content="Log in" Command="{Binding NavigateToLoginView}" CommandParameter="Login" Visibility="{Binding ToggleLoginBtnVisibility}" Background="#00DDDDDD" BorderBrush="#00707070"/>
+            <Button Content="Register" Command="{Binding NavigateToRegisterView}" CommandParameter="Register" Visibility="{Binding ToggleLoginBtnVisibility}" Background="#00DDDDDD" BorderBrush="#00707070" />
         </StackPanel>
         <ContentControl Grid.Row="1" prism:RegionManager.RegionName="ContentRegion" Background="#00000000" BorderBrush="#00000000" />
     </Grid>

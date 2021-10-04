@@ -13,6 +13,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace HotelResFE.ViewModels
@@ -26,7 +27,7 @@ namespace HotelResFE.ViewModels
         private string _password;
         
         public DelegateCommand<LoginCreds> PostLoginCommand { get; private set; }
-
+        public RoutedCommand CutNotEnabledCommand { get; private set; }
         public string Username
         {
             //get {return ""}
@@ -38,6 +39,8 @@ namespace HotelResFE.ViewModels
             //get { return "*****************"; }
             set { SetProperty(ref _password, Garble(value)); PostLoginCommand.RaiseCanExecuteChanged(); }
         }
+
+        
 
         public LoginViewModel(ILoginService service, IEventAggregator aggregator)
         {

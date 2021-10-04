@@ -40,12 +40,19 @@ public partial class App : PrismApplication
             base.OnInitialized();
             var regionManager = Container.Resolve<IRegionManager>();
             var contentRegion = regionManager.Regions["ContentRegion"];
-            var hotelsview = Container.Resolve<Hotels>();
+            var homeView = Container.Resolve<Home>();
+            var hotelsView = Container.Resolve<Hotels>();
             var loginView = Container.Resolve<Login>();
-            
+            var userDetailsView = Container.Resolve<UserDetails>();
+            var hotelDetailsView = Container.Resolve<HotelDetails>();
+            var registerView = Container.Resolve<Register>();
+
+            contentRegion.Add(homeView);
             contentRegion.Add(loginView);
-            contentRegion.Add(hotelsview);
-            
+            contentRegion.Add(hotelsView);
+            contentRegion.Add(userDetailsView);
+            contentRegion.Add(hotelDetailsView);
+            contentRegion.Add(registerView);
             
         }
     }
