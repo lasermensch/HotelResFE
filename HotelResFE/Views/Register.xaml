@@ -7,6 +7,22 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <StackPanel >
+            <Label Content="FirstName"/>
+            <TextBox Text="{Binding FirstName}"/>
+            <Label Content="LastName"/>
+            <TextBox Text="{Binding LastName}"/>
+            <Label Content="Address"/>
+            <TextBox Text="{Binding Address}"/>
+            <Label Content="Phone Number"/>
+            <TextBox Text="{Binding PhoneNumber}"/>
+            <Label Content="UserName"/>
+            <TextBox Text="{Binding UserName}"/>
+            <Label Content="Password" />
+            <TextBox Text="{Binding Password}"/>
+            <Label Content="Repeat Password"/>
+            <TextBox Text="{Binding PassControl}"/>
+            <Button Margin="20" Content="Register"/>
+        </StackPanel>
     </Grid>
 </UserControl>

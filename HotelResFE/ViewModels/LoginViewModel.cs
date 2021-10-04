@@ -20,7 +20,7 @@ namespace HotelResFE.ViewModels
 {
     public class LoginViewModel : BindableBase
     {
-        private readonly ILoginService _service;
+        private readonly IUserService _service;
         private readonly IEventAggregator _aggregator;
         
         private string _username;
@@ -42,7 +42,7 @@ namespace HotelResFE.ViewModels
 
         
 
-        public LoginViewModel(ILoginService service, IEventAggregator aggregator)
+        public LoginViewModel(IUserService service, IEventAggregator aggregator)
         {
             _service = service;
             _aggregator = aggregator;

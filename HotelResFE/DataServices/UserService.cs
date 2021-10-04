@@ -14,12 +14,12 @@ using System.Threading.Tasks;
 
 namespace HotelResFE.DataServices
 {
-    public class LoginService : ILoginService
+    public class UserService : IUserService
     {
         private readonly HttpClient _client;
         private readonly string _baseUrl;
 
-        public LoginService(HttpClient httpClient)
+        public UserService(HttpClient httpClient)
         {
             _client = httpClient;
             _baseUrl = "";
@@ -49,6 +49,14 @@ namespace HotelResFE.DataServices
                 Debug.WriteLine(ex.Message);
                 return null;
             }
+        }
+
+        public async Task<HttpStatusCode> RegisterNewUserAsync(User user)
+        {
+            var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync(new Uri($"{_baseUrl}/users"), content);
+
+            return response.StatusCode;
         }
 
         private string UnGarble(string nonsense)

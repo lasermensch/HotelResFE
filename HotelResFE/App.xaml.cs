@@ -28,7 +28,7 @@ public partial class App : PrismApplication
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterScoped<ILoginService, LoginService>();
+            containerRegistry.RegisterScoped<IUserService, UserService>();
             containerRegistry.RegisterScoped<IHotelsService, HotelsService>();
 
             containerRegistry.RegisterForNavigation<Login>();
