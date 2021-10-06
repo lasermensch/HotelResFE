@@ -17,7 +17,35 @@ namespace HotelResFE.ViewModels
         private Hotel _hotel;
         private Reservation _reservation;
         private Room _room;
-        
+        private DateTime _startDate;
+        private DateTime _endDate;
+        private DateTime _selectedDate;
+        private bool _includeTransport;
+        private bool _includePool;
+        private bool _includeBreakfast;
+        private bool _includeAll;
+
+        public bool IncludeTransport
+        {
+            get { return _includeTransport; }
+            set { SetProperty(ref _includeTransport, value); }
+        }
+        public bool IncludePool
+        {
+            get { return _includePool; }
+            set { SetProperty(ref _includePool, value); }
+        }
+        public bool IncludeBreakFast
+        {
+            get { return _includeBreakfast; }
+            set { SetProperty(ref _includeBreakfast, value); }
+        }
+        public bool IncludeAll
+        {
+            get { return _includeAll; }
+            set { SetProperty(ref _includeAll, value); }
+        }
+
         public Hotel Hotel
         {
             get { return _hotel; }
@@ -28,7 +56,22 @@ namespace HotelResFE.ViewModels
             get { return _room; }
             set { SetProperty(ref _room, value); }
         }
-        
+
+        public DateTime StartDate
+        {
+            get { return _startDate; }
+            set { SetProperty(ref _startDate, value); }
+        }
+        public DateTime EndDate
+        {
+            get { return _endDate; }
+            set { SetProperty(ref _endDate, value); }
+        }
+        public DateTime SelectedDate
+        {
+            get { return _selectedDate; }
+            set { SetProperty(ref _selectedDate, value); }
+        }
 
         public HotelDetailsViewModel(IEventAggregator aggregator, IHotelsService service)
         {
@@ -37,6 +80,8 @@ namespace HotelResFE.ViewModels
             _hotel = new();
             _reservation = new();
             _room = new();
+            _startDate = DateTime.Today;
+            _endDate = DateTime.Today.AddDays(366);
 
         }
     }

@@ -17,6 +17,7 @@
             <Button Width="60" Command="{Binding NavigateToUserDetailsView}" CommandParameter="UserDetails" Visibility="{Binding ToggleUserpageBtnVisibility}" ClipToBounds="True" BorderBrush="#00707070" Background="Transparent">
                 <Image Source="../Resources/Icons/user-solid.png" />
             </Button>
+            <Button Command="{Binding LogoutCommand}" Visibility="{Binding ToggleUserpageBtnVisibility}" Background="#00DDDDDD" BorderBrush="#00707070" Content="Logout"/>
 
             <Button Content="Log in" Command="{Binding NavigateToLoginView}" CommandParameter="Login" Visibility="{Binding ToggleLoginBtnVisibility}" Background="#00DDDDDD" BorderBrush="#00707070"/>
             <Button Content="Register" Command="{Binding NavigateToRegisterView}" CommandParameter="Register" Visibility="{Binding ToggleLoginBtnVisibility}" Background="#00DDDDDD" BorderBrush="#00707070" />

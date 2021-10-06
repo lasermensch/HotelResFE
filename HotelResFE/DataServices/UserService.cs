@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -22,7 +23,7 @@ namespace HotelResFE.DataServices
         public UserService(HttpClient httpClient)
         {
             _client = httpClient;
-            _baseUrl = "";
+            _baseUrl = "https://localhost:44364/api";
 
         }
 
@@ -30,7 +31,7 @@ namespace HotelResFE.DataServices
         {
             try
             {
-                creds.Password = UnGarble(creds.Password);
+                creds.Password = SecurityService.UnGarble(creds.Password);
                 string json = JsonConvert.SerializeObject(creds); //Kanske måste lägga in citationstecken i strängen.
 
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -39,14 +40,15 @@ namespace HotelResFE.DataServices
                 {
 
                     string token = response.Content.ToString();
+                    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer ", token);
                     return token;
                 }
 
                 return null;
             }
-            catch (Exception ex)
+            catch (Exception epicFail)
             {
-                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(epicFail.Message);
                 return null;
             }
         }
@@ -59,34 +61,52 @@ namespace HotelResFE.DataServices
             return response.StatusCode;
         }
 
-        private string UnGarble(string nonsense)
+        public async Task<User> GetUserAsync()
         {
-            byte[] resultArray = null;
+            
             try
             {
-                byte[] keyArray;
-                byte[] toEncryptArray = Convert.FromBase64String(nonsense);
+                var response = await _client.GetAsync(new Uri($"{_baseUrl}/users/userfromtoken"));
 
-                keyArray = UTF8Encoding.UTF8.GetBytes("q3t6w9z$C&E)H@Mc");
-
-
-                using (TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider())
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    tdes.Key = keyArray;
-                    tdes.Mode = CipherMode.ECB;
-                    tdes.Padding = PaddingMode.PKCS7;
-
-                    ICryptoTransform cTransform = tdes.CreateDecryptor();
-                    resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+                    var content = await response.Content.ReadAsStringAsync();
+                    User u = JsonConvert.DeserializeObject<User>(content);
+                    return u;
                 }
-
-
             }
-            catch (Exception ex)
+            catch(Exception epicFail)
             {
-                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(epicFail.Message);
+                
             }
-            return UTF8Encoding.UTF8.GetString(resultArray);
+            return null;
+            
         }
+
+        public async Task<HttpStatusCode> DeleteUserAsync()
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _client.DeleteAsync(new Uri($"{_baseUrl}/users"));
+                
+
+            }catch(Exception epicFail)
+            {
+                Debug.WriteLine(epicFail.Message);
+            }
+
+            return response.StatusCode;
+        }
+        public void LogOut()
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "");
+            
+        }
+
+        
+
+        
     }
 }

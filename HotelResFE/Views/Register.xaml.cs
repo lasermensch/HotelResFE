@@ -24,5 +24,11 @@ namespace HotelResFE.Views
         {
             InitializeComponent();
         }
+
+        private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = false;
+            e.Handled = true;
+        }
     }
 }

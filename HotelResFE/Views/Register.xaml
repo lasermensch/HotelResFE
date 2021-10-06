@@ -19,9 +19,21 @@
             <Label Content="UserName"/>
             <TextBox Text="{Binding UserName}"/>
             <Label Content="Password" />
-            <TextBox Text="{Binding Password}"/>
+            <TextBox Text="{Binding Password}" FontFamily="pack://application:,,,/Resources/Fonts/#PassStar" Height="17.96">
+                <TextBox.CommandBindings>
+                    <!--Tills vidare får det väl duga...-->
+                    <CommandBinding Command="ApplicationCommands.Copy" CanExecute="CommandBinding_CanExecute"/>
+                    <CommandBinding Command="ApplicationCommands.Cut" CanExecute="CommandBinding_CanExecute" />
+                </TextBox.CommandBindings>
+            </TextBox>
             <Label Content="Repeat Password"/>
-            <TextBox Text="{Binding PassControl}"/>
+            <TextBox Text="{Binding PassControl}" FontFamily="pack://application:,,,/Resources/Fonts/#PassStar" Height="17.96">
+                <TextBox.CommandBindings>
+                    <!--Tills vidare får det väl duga...-->
+                    <CommandBinding Command="ApplicationCommands.Copy" CanExecute="CommandBinding_CanExecute"/>
+                    <CommandBinding Command="ApplicationCommands.Cut" CanExecute="CommandBinding_CanExecute" />
+                </TextBox.CommandBindings>
+            </TextBox>
             <Button Margin="20" Content="Register"/>
         </StackPanel>
     </Grid>

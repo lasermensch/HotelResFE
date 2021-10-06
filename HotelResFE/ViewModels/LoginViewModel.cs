@@ -5,6 +5,7 @@ using HotelResFE.Views;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,37 +17,40 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
+
 namespace HotelResFE.ViewModels
 {
     public class LoginViewModel : BindableBase
     {
-        private readonly IUserService _service;
-        private readonly IEventAggregator _aggregator;
+        private readonly IUserService _userService;
+        private readonly IEventAggregator _eventAggregator;
+        private readonly IRegionManager _regionManager;
         
-        private string _username;
+        private string _email;
         private string _password;
         
         public DelegateCommand<LoginCreds> PostLoginCommand { get; private set; }
-        public RoutedCommand CutNotEnabledCommand { get; private set; }
-        public string Username
+        
+        public string Email
         {
-            //get {return ""}
-            set { SetProperty(ref _username, value); PostLoginCommand.RaiseCanExecuteChanged(); }
+            get { return _email; }
+            set { SetProperty(ref _email, value); PostLoginCommand.RaiseCanExecuteChanged(); }
         }
        
         public string Password
         {
-            //get { return "*****************"; }
-            set { SetProperty(ref _password, Garble(value)); PostLoginCommand.RaiseCanExecuteChanged(); }
+            
+            set { SetProperty(ref _password, SecurityService.Garble(value)); PostLoginCommand.RaiseCanExecuteChanged(); }
         }
 
         
 
-        public LoginViewModel(IUserService service, IEventAggregator aggregator)
+        public LoginViewModel(IUserService userService, IEventAggregator eventAggregator, IRegionManager regionManager)
         {
-            _service = service;
-            _aggregator = aggregator;
-            _username = "";
+            _userService = userService;
+            _eventAggregator = eventAggregator;
+            _regionManager = regionManager;
+            _email = "";
             _password = "";
 
             PostLoginCommand = new DelegateCommand<LoginCreds>(PostLogin, CanPostLogin);
@@ -55,53 +59,32 @@ namespace HotelResFE.ViewModels
         private async void PostLogin(LoginCreds obj)
         {
             LoginCreds creds = new LoginCreds();
-            creds.Username = _username;
+            creds.Email = _email;
             creds.Password = _password;
 
-            string resp = await _service.LoginAsync(creds);
+            string resp = await _userService.LoginAsync(creds);
 
             if(resp == null)
             {
-                MessageBox.Show("Failed Login Attempt!");
+                MessageBox.Show("Email or Password is incorrect!");
             }
             else
             {
-                _aggregator.GetEvent<LoggedInEvent>().Publish();
-                MessageBox.Show("Login Attempt successful!");
+                _eventAggregator.GetEvent<LoggedInEvent>().Publish();
+                _regionManager.RequestNavigate("ContentRegion", "Hotels");
             }
         }
 
         private bool CanPostLogin(LoginCreds arg)
         {
             bool canDo = true;
-            if (String.IsNullOrWhiteSpace(_username) || String.IsNullOrWhiteSpace(_password))
+            if (String.IsNullOrWhiteSpace(_email) || String.IsNullOrWhiteSpace(_password))
                 canDo = false;
 
             return canDo;
         }
 
-        private string Garble(string secret) 
-        {
-            byte[] toEncryptArray = UTF8Encoding.UTF8.GetBytes(secret);
-            Byte[] resultArray = null;
-            try { 
-            using (TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider())
-            {
-                byte[] keyArray = UTF8Encoding.UTF8.GetBytes("q3t6w9z$C&E)H@Mc");
-                tdes.Key = keyArray;
-                tdes.Mode = CipherMode.ECB;
-                tdes.Padding = PaddingMode.PKCS7;
-                ICryptoTransform cTransform = tdes.CreateEncryptor();
-                resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-            }
-
-        }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
-            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
-        }
+        
     }
 
     

@@ -7,17 +7,37 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <DatePicker Name="datePickerWithBlackoutDates"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="1">
+            <TextBlock Text="Välj aktuella veckor för att se vilka rumsstorlekar är lediga"/>
+            <DatePicker Name="datePickerWithBlackoutDates"
             DisplayDateStart="{Binding StartDate}"
             DisplayDateEnd="{Binding EndDate}"
             SelectedDate="{Binding SelectedDate}">
-            <DatePicker.BlackoutDates>
-                <CalendarDateRange Start="8/1/09" End="8/2/09"/>
-                <CalendarDateRange Start="8/8/09" End="8/9/09"/>
-                <CalendarDateRange Start="8/15/09" End="8/16/09"/>
-                <CalendarDateRange Start="8/22/09" End="8/23/09"/>
-                <CalendarDateRange Start="8/29/09" End="8/30/09"/>
-            </DatePicker.BlackoutDates>
-        </DatePicker>
+                <DatePicker.BlackoutDates>
+                    <!--<CalendarDateRange Start="8/1/09" End="8/2/09"/>
+                    <CalendarDateRange Start="8/8/09" End="8/9/09"/>
+                    <CalendarDateRange Start="8/15/09" End="8/16/09"/>
+                    <CalendarDateRange Start="8/22/09" End="8/23/09"/>
+                    <CalendarDateRange Start="8/29/09" End="8/30/09"/>-->
+                </DatePicker.BlackoutDates>
+            </DatePicker>
+            <ComboBox ItemsSource="{Binding RoomSize}"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label Content="Transportation"/>
+                <CheckBox IsChecked="{Binding IncludeTransport}" />
+                <Label Content="Pool access"/>
+                <CheckBox IsChecked="{Binding IncludePool}"/>
+                <Label Content="Breakfast"/>
+                <CheckBox IsChecked="{Binding IncludeBreakfast}"/>
+                <Label Content="All Inclusive"/>
+                <CheckBox IsChecked="{Binding IncludeAll}"/>
+            </StackPanel>
+        </StackPanel>
+        
     </Grid>
 </UserControl>

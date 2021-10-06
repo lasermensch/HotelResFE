@@ -21,7 +21,6 @@ namespace HotelResFE.ViewModels
         private string _lastName;
         private string _email;
         private string _phoneNumber;
-        private string _userName;
         private string _password;
         private string _passControl;
 
@@ -47,20 +46,15 @@ namespace HotelResFE.ViewModels
             get { return _phoneNumber; }
             set { SetProperty(ref _phoneNumber, value); }
         }
-        public string UserName
-        {
-            get { return _userName; }
-            set { SetProperty(ref _userName, value); }
-        }
         public string Password
         {
-            get { return _password; }
-            set { SetProperty(ref _password, value); }
+            
+            set { SetProperty(ref _password, SecurityService.Garble(value)); }
         }
         public string PassControl
         {
-            get { return _passControl; }
-            set { SetProperty(ref _passControl, value); }
+            
+            set { SetProperty(ref _passControl, SecurityService.Garble(value)); }
         }
 
         public DelegateCommand<User> CreateUserCommand { get; private set; }
@@ -69,9 +63,16 @@ namespace HotelResFE.ViewModels
         {
             _eventAggregator = eventAggregator;
             _userService = userService;
-            
+            CreateUserCommand = new DelegateCommand<User>(CreateUser, CanCreateUser);
         }
+        private bool CanCreateUser(User user)
+        {
+            bool canDo = true;
+            if (_password != _passControl)
+                canDo = false;
 
+            return canDo;
+        }
         private async void CreateUser(User user)
         {
             user = new();
@@ -79,7 +80,6 @@ namespace HotelResFE.ViewModels
             user.LastName = _lastName;
             user.Email = _email;
             user.PhoneNr = _phoneNumber;
-            user.UserName = _userName;
             user.Password = _password;
 
             HttpStatusCode r = await _userService.RegisterNewUserAsync(user);

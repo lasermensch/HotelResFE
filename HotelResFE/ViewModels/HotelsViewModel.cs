@@ -18,9 +18,12 @@ namespace HotelResFE.ViewModels
         private ObservableCollection<Hotel> _hotels;
         private Hotel _selectedHotel;
         private HotelImage _selectedImage;
+
         private ObservableCollection<HotelImage> _images;
         private IEventAggregator _aggregator;
         private IHotelsService _service;
+
+
 
         public ObservableCollection<Hotel> Hotels
         {
@@ -31,6 +34,11 @@ namespace HotelResFE.ViewModels
         {
             get { return _selectedHotel; }
             set { SetProperty(ref _selectedHotel, value); }
+        }
+        public HotelImage SelecedImage
+        {
+            get { return _selectedImage; }
+            set { SetProperty(ref _selectedImage, value); }
         }
         public ObservableCollection<HotelImage> Images
         {
@@ -43,12 +51,8 @@ namespace HotelResFE.ViewModels
             } 
             set { SetProperty(ref _images, value); }
         }
-        public HotelImage SelecedImage
-        {
-            get { return _selectedImage; }
-            set { SetProperty(ref _selectedImage, value); }
-        }
-        
+
+
         public HotelsViewModel(IEventAggregator aggregator, IHotelsService service)
         {
             _aggregator = aggregator;
@@ -56,6 +60,7 @@ namespace HotelResFE.ViewModels
             _hotels = new();
             _images = new();
             _selectedHotel = new();
+            
             LoadHotels();
         }
 
