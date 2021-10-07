@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HotelResFE.Views"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -12,12 +14,13 @@
             <TextBox Text="{Binding FirstName}"/>
             <Label Content="LastName"/>
             <TextBox Text="{Binding LastName}"/>
+            <Label Content="Email"/>
+            <TextBox Text="{Binding Email}"/>
             <Label Content="Address"/>
-            <TextBox Text="{Binding Address}"/>
+            <TextBox Text="{Binding Adress}"/>
             <Label Content="Phone Number"/>
             <TextBox Text="{Binding PhoneNumber}"/>
-            <Label Content="UserName"/>
-            <TextBox Text="{Binding UserName}"/>
+            
             <Label Content="Password" />
             <TextBox Text="{Binding Password}" FontFamily="pack://application:,,,/Resources/Fonts/#PassStar" Height="17.96">
                 <TextBox.CommandBindings>
@@ -34,7 +37,7 @@
                     <CommandBinding Command="ApplicationCommands.Cut" CanExecute="CommandBinding_CanExecute" />
                 </TextBox.CommandBindings>
             </TextBox>
-            <Button Margin="20" Content="Register"/>
+            <Button Margin="20" Command="{Binding CreateUserCommand}" Content="Register"/>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -14,7 +14,7 @@ namespace HotelResFE.DataServices
         public Task<string> LoginAsync(LoginCreds creds);
         public Task<HttpStatusCode> RegisterNewUserAsync(User user);
         public Task<User> GetUserAsync();
-        public Task<string> DeleteUserAsync();
+        public Task<HttpStatusCode> DeleteUserAsync();
         public void LogOut();
     }
 }

@@ -46,12 +46,12 @@ namespace HotelResFE.ViewModels
             DeleteUserCommand = new DelegateCommand<User>(DeleteUser);
         }
 
-        private void DeleteUser(User obj)
+        private void DeleteUser(User user)
         {
             throw new NotImplementedException();
         }
 
-        private void UpdateUser(User obj)
+        private void UpdateUser(User user)
         {
             throw new NotImplementedException();
         }

@@ -40,7 +40,7 @@ namespace HotelResFE.DataServices
                 {
 
                     string token = response.Content.ToString();
-                    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer ", token);
+                    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                     return token;
                 }
 
@@ -55,15 +55,22 @@ namespace HotelResFE.DataServices
 
         public async Task<HttpStatusCode> RegisterNewUserAsync(User user)
         {
-            var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+            LoginCreds creds = new LoginCreds() { Email = user.Email, Password = user.Password };
+
+            user.Password = SecurityService.UnGarble(user.Password);
+            var json = JsonConvert.SerializeObject(user);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _client.PostAsync(new Uri($"{_baseUrl}/users"), content);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+                await LoginAsync(creds);
 
             return response.StatusCode;
         }
 
         public async Task<User> GetUserAsync()
         {
-            
+
             try
             {
                 var response = await _client.GetAsync(new Uri($"{_baseUrl}/users/userfromtoken"));
@@ -75,13 +82,18 @@ namespace HotelResFE.DataServices
                     return u;
                 }
             }
-            catch(Exception epicFail)
+            catch (Exception epicFail)
             {
                 Debug.WriteLine(epicFail.Message);
-                
+
             }
             return null;
-            
+
+        }
+        public Task<User> EditUser()
+        {
+
+            throw new NotImplementedException();
         }
 
         public async Task<HttpStatusCode> DeleteUserAsync()

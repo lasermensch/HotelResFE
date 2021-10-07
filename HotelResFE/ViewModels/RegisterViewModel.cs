@@ -20,6 +20,7 @@ namespace HotelResFE.ViewModels
         private string _firstName;
         private string _lastName;
         private string _email;
+        private string _adress;
         private string _phoneNumber;
         private string _password;
         private string _passControl;
@@ -40,6 +41,11 @@ namespace HotelResFE.ViewModels
         {
             get { return _email; }
             set { SetProperty(ref _email, value); }
+        }
+        public string Adress
+        { 
+            get { return _adress; }
+            set { SetProperty(ref _adress, value); }
         }
         public string PhoneNumber
         {
@@ -79,6 +85,7 @@ namespace HotelResFE.ViewModels
             user.FirstName = _firstName;
             user.LastName = _lastName;
             user.Email = _email;
+            user.Adress = _adress;
             user.PhoneNr = _phoneNumber;
             user.Password = _password;
 
@@ -87,6 +94,7 @@ namespace HotelResFE.ViewModels
             if(r == HttpStatusCode.OK)
             {
                 _eventAggregator.GetEvent<RegisteredEvent>().Publish();
+                _eventAggregator.GetEvent<LoggedInEvent>().Publish();
             }
         }
 
