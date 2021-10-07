@@ -54,7 +54,10 @@ namespace HotelResFE.ViewModels
             _password = "";
 
             PostLoginCommand = new DelegateCommand<LoginCreds>(PostLogin, CanPostLogin);
+            //_eventAggregator.GetEvent<RegisteredEvent>().Subscribe();
         }
+
+       
 
         private async void PostLogin(LoginCreds obj)
         {

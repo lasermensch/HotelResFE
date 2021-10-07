@@ -89,11 +89,14 @@ namespace HotelResFE.ViewModels
             user.PhoneNr = _phoneNumber;
             user.Password = _password;
 
-            HttpStatusCode r = await _userService.RegisterNewUserAsync(user);
+            HttpStatusCode? r = await _userService.RegisterNewUserAsync(user);
 
             if(r == HttpStatusCode.OK)
             {
-                _eventAggregator.GetEvent<RegisteredEvent>().Publish();
+                LoginCreds creds = new LoginCreds();
+                creds.Email = user.Email;
+                creds.Password = user.Password;
+                _eventAggregator.GetEvent<RegisteredEvent>().Publish(); //Kanske ska ta bort?
                 _eventAggregator.GetEvent<LoggedInEvent>().Publish();
             }
         }

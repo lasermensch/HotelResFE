@@ -1,4 +1,5 @@
 ﻿using HotelResFE.DataServices;
+using HotelResFE.Events;
 using HotelResFE.Models;
 using Prism.Commands;
 using Prism.Events;
@@ -26,6 +27,7 @@ namespace HotelResFE.ViewModels
         }
         public string NewPassword
         {
+            
             set { SetProperty(ref _newPassword, value); }
         }
         public string PassControl
@@ -46,19 +48,23 @@ namespace HotelResFE.ViewModels
             DeleteUserCommand = new DelegateCommand<User>(DeleteUser);
         }
 
-        private void DeleteUser(User user)
+        private async void DeleteUser(User user)
         {
-            throw new NotImplementedException();
+            var response = await _userService.DeleteUserAsync();
+            if (response == System.Net.HttpStatusCode.NoContent)
+                _eventAggregator.GetEvent<LoggedOutEvent>().Publish();
         }
 
         private void UpdateUser(User user)
         {
-            throw new NotImplementedException();
+            user = _user;
+            ////_userService;
         }
 
         private async Task<User> LoadUser()
         {
-            return await _userService.GetUserAsync();
+            User u = await _userService.GetUserAsync();
+            return u;
             
         }
     }

@@ -12,9 +12,9 @@ namespace HotelResFE.DataServices
     public interface IUserService
     {
         public Task<string> LoginAsync(LoginCreds creds);
-        public Task<HttpStatusCode> RegisterNewUserAsync(User user);
+        public Task<HttpStatusCode?> RegisterNewUserAsync(User user);
         public Task<User> GetUserAsync();
-        public Task<HttpStatusCode> DeleteUserAsync();
+        public Task<HttpStatusCode?> DeleteUserAsync();
         public void LogOut();
     }
 }

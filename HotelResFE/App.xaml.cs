@@ -33,6 +33,7 @@ public partial class App : PrismApplication
 
             containerRegistry.RegisterForNavigation<Login>();
             containerRegistry.RegisterForNavigation<Hotels>();
+            containerRegistry.RegisterForNavigation<UserDetails>();
         }
 
         protected override void OnInitialized()

@@ -14,9 +14,9 @@
     <Grid>
         <StackPanel Width="400">
             <Label Content="Email"/>
-            <TextBox Text="{Binding Email, Mode=TwoWay}" />
+            <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Label Content="Password"/>
-            <TextBox  Name="tbxPassword" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+            <TextBox  Name="tbxPassword" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      FontFamily="pack://application:,,,/Resources/Fonts/#PassStar" Visibility="Visible" FontSize="20" Height="17.96">
                 <TextBox.CommandBindings>
                     <!--Tills vidare får det väl duga...-->

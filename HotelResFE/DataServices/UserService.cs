@@ -53,19 +53,26 @@ namespace HotelResFE.DataServices
             }
         }
 
-        public async Task<HttpStatusCode> RegisterNewUserAsync(User user)
+        public async Task<HttpStatusCode?> RegisterNewUserAsync(User user)
         {
-            LoginCreds creds = new LoginCreds() { Email = user.Email, Password = user.Password };
+            try
+            {
+                LoginCreds creds = new LoginCreds() { Email = user.Email, Password = user.Password };
 
-            user.Password = SecurityService.UnGarble(user.Password);
-            var json = JsonConvert.SerializeObject(user);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync(new Uri($"{_baseUrl}/users"), content);
+                user.Password = SecurityService.UnGarble(user.Password);
+                var json = JsonConvert.SerializeObject(user);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _client.PostAsync(new Uri($"{_baseUrl}/users"), content);
 
-            if (response.StatusCode == HttpStatusCode.OK)
-                await LoginAsync(creds);
+                if (response.StatusCode == HttpStatusCode.OK)
+                    await LoginAsync(creds);
 
-            return response.StatusCode;
+                return response.StatusCode;
+            }catch(Exception epicFail)
+            {
+                Debug.WriteLine(epicFail.Message);
+                return null;
+            }
         }
 
         public async Task<User> GetUserAsync()
@@ -74,10 +81,14 @@ namespace HotelResFE.DataServices
             try
             {
                 var response = await _client.GetAsync(new Uri($"{_baseUrl}/users/userfromtoken"));
-
+                if (response.StatusCode == HttpStatusCode.Forbidden)
+                    return null;
+                Debug.WriteLine(response);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     var content = await response.Content.ReadAsStringAsync();
+                    if (String.IsNullOrWhiteSpace(content))
+                    return null;
                     User u = JsonConvert.DeserializeObject<User>(content);
                     return u;
                 }
@@ -87,29 +98,46 @@ namespace HotelResFE.DataServices
                 Debug.WriteLine(epicFail.Message);
 
             }
-            return null;
+            return new();
 
         }
-        public Task<User> EditUser()
+        public async Task<User> EditUser(User user) //Varför ska vi returnera en user?
         {
 
-            throw new NotImplementedException();
-        }
-
-        public async Task<HttpStatusCode> DeleteUserAsync()
-        {
-            HttpResponseMessage response = null;
             try
             {
-                response = await _client.DeleteAsync(new Uri($"{_baseUrl}/users"));
-                
+                user.Password = SecurityService.UnGarble(user.Password);
+                string json = JsonConvert.SerializeObject(user);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _client.PutAsync(new Uri($"{_baseUrl}/users"), content);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return user;
 
             }catch(Exception epicFail)
             {
                 Debug.WriteLine(epicFail.Message);
             }
 
-            return response.StatusCode;
+            return null;
+        }
+
+        public async Task<HttpStatusCode?> DeleteUserAsync()
+        {
+            
+            try
+            {
+                var response = await _client.DeleteAsync(new Uri($"{_baseUrl}/users"));
+                return response.StatusCode;
+
+            }
+            catch(Exception epicFail)
+            {
+                Debug.WriteLine(epicFail.Message);
+                return null;
+            }
+
+            
         }
         public void LogOut()
         {
