@@ -23,10 +23,10 @@ namespace HotelResFE.ViewModels
         private IUserService _userService;
 
         public DelegateCommand LogoutCommand { get; private set; }
-        public DelegateCommand<string> NavigateToHotelsView { get; private set; }
-        public DelegateCommand<string> NavigateToLoginView { get; private set; }
-        public DelegateCommand<string> NavigateToRegisterView { get; private set; }
-        public DelegateCommand<string> NavigateToUserDetailsView { get; private set; }
+        public DelegateCommand<string> NavigateToHotelsViewCommand { get; private set; }
+        public DelegateCommand<string> NavigateToLoginViewCommand { get; private set; }
+        public DelegateCommand<string> NavigateToRegisterViewCommand { get; private set; }
+        public DelegateCommand<string> NavigateToUserDetailsViewCommand { get; private set; }
 
         public Visibility ToggleUserpageBtnVisibility
         {
@@ -46,10 +46,10 @@ namespace HotelResFE.ViewModels
 
             LogoutCommand = new DelegateCommand(LogOut);
 
-            NavigateToHotelsView = new DelegateCommand<string>(Navigate);
-            NavigateToLoginView = new DelegateCommand<string>(Navigate);
-            NavigateToRegisterView = new DelegateCommand<string>(Navigate);
-            //NavigateToUserDetailsView = new DelegateCommand<string>(Navigate);
+            NavigateToHotelsViewCommand = new DelegateCommand<string>(Navigate);
+            NavigateToLoginViewCommand = new DelegateCommand<string>(Navigate);
+            NavigateToRegisterViewCommand = new DelegateCommand<string>(Navigate);
+            NavigateToUserDetailsViewCommand = new DelegateCommand<string>(Navigate);
 
             _eventAggregator.GetEvent<LoggedInEvent>().Subscribe(IsLoggedIn);
             _eventAggregator.GetEvent<LoggedOutEvent>().Subscribe(LogOut);
@@ -61,6 +61,7 @@ namespace HotelResFE.ViewModels
             _isLoggedIn = false;
             RaisePropertyChanged(nameof(ToggleLoginBtnVisibility));
             RaisePropertyChanged(nameof(ToggleUserpageBtnVisibility));
+            Navigate("Home");
         }
 
         private void IsLoggedIn()

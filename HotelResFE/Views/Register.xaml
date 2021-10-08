@@ -19,7 +19,7 @@
             <Label Content="Address"/>
             <TextBox Text="{Binding Adress}"/>
             <Label Content="Phone Number"/>
-            <TextBox Text="{Binding PhoneNumber}"/>
+            <TextBox Text="{Binding PhoneNr}"/>
             
             <Label Content="Password" />
             <TextBox Text="{Binding Password}" FontFamily="pack://application:,,,/Resources/Fonts/#PassStar" Height="17.96">

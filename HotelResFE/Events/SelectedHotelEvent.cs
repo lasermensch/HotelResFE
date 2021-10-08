@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HotelResFE.Events
 {
-    class RegisteredEvent : PubSubEvent<LoginCreds>
+    class SelectedHotelEvent : PubSubEvent<Hotel>
     {
     }
 }

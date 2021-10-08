@@ -1,4 +1,5 @@
 ﻿using HotelResFE.DataServices;
+using HotelResFE.Events;
 using HotelResFE.Models;
 using Prism.Events;
 using Prism.Mvvm;
@@ -14,7 +15,7 @@ namespace HotelResFE.ViewModels
     {
         private IEventAggregator _aggregator;
         private IHotelsService _service;
-        private Hotel _hotel;
+        private Hotel _selectedHotel;
         private Reservation _reservation;
         private Room _room;
         private DateTime _startDate;
@@ -46,10 +47,10 @@ namespace HotelResFE.ViewModels
             set { SetProperty(ref _includeAll, value); }
         }
 
-        public Hotel Hotel
+        public Hotel SelectedHotel
         {
-            get { return _hotel; }
-            set { SetProperty(ref _hotel, value); }
+            get { return _selectedHotel; }
+            set { SetProperty(ref _selectedHotel, value); }
         }
         public Room Room
         {
@@ -77,12 +78,18 @@ namespace HotelResFE.ViewModels
         {
             _aggregator = aggregator;
             _service = service;
-            _hotel = new();
+            _selectedHotel = new();
             _reservation = new();
             _room = new();
             _startDate = DateTime.Today;
             _endDate = DateTime.Today.AddDays(366);
 
+            aggregator.GetEvent<SelectedHotelEvent>().Subscribe(LoadHotel);
+        }
+
+        private void LoadHotel(Hotel hotel)
+        {
+            SelectedHotel = hotel;
         }
     }
 }

@@ -15,9 +15,9 @@
             <Label Content="LastName"/>
             <TextBox Text="{Binding User.LastName}"/>
             <Label Content="Address"/>
-            <TextBox Text="{Binding User.Address}"/>
+            <TextBox Text="{Binding User.Adress}"/>
             <Label Content="Phone Number"/>
-            <TextBox Text="{Binding User.PhoneNumber}"/>
+            <TextBox Text="{Binding User.PhoneNr}"/>
             
             <Label Content="Password" />
             <TextBox Text="{Binding NewPassword}" FontFamily="pack://application:,,,/Resources/Fonts/#PassStar" Height="17.96">

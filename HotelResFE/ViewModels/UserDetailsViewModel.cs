@@ -4,6 +4,7 @@ using HotelResFE.Models;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace HotelResFE.ViewModels
 {
-    public class UserDetailsViewModel: BindableBase
+    public class UserDetailsViewModel: BindableBase 
     {
         private User _user;
         private IEventAggregator _eventAggregator;
@@ -39,13 +40,17 @@ namespace HotelResFE.ViewModels
         public DelegateCommand<User> DeleteUserCommand { get; private set; }
         public DelegateCommand<User> UpdateUserCommand { get; private set; }
 
+        
+
         public UserDetailsViewModel(IEventAggregator eventAggregator, IUserService userService)
         {
             _eventAggregator = eventAggregator;
             _userService = userService;
-            _user = LoadUser().Result;
+            _user = new();
             UpdateUserCommand = new DelegateCommand<User>(UpdateUser);
             DeleteUserCommand = new DelegateCommand<User>(DeleteUser);
+
+            _eventAggregator.GetEvent<LoggedInEvent>().Subscribe(LoadUser);
         }
 
         private async void DeleteUser(User user)
@@ -58,14 +63,12 @@ namespace HotelResFE.ViewModels
         private void UpdateUser(User user)
         {
             user = _user;
-            ////_userService;
+            user.Password = _passControl;
         }
-
-        private async Task<User> LoadUser()
+        private async void LoadUser()
         {
-            User u = await _userService.GetUserAsync();
-            return u;
-            
+            User = await _userService.GetUserAsync();
         }
+       
     }
 }

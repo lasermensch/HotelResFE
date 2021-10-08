@@ -14,6 +14,7 @@ namespace HotelResFE.Models
         public string Adress { get; set; }
      
         public string Email { get; set; }
+        public double Rating { get; set; }
      
         public string PhoneNr { get; set; }
         public string WebPage { get; set; }

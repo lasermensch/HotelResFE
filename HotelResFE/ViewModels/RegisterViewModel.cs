@@ -4,16 +4,19 @@ using HotelResFE.Models;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace HotelResFE.ViewModels
 {
-    public class RegisterViewModel : BindableBase
+    public class RegisterViewModel : BindableBase, INotifyPropertyChanged
     {
         private IEventAggregator _eventAggregator;
         private IUserService _userService;
@@ -21,9 +24,10 @@ namespace HotelResFE.ViewModels
         private string _lastName;
         private string _email;
         private string _adress;
-        private string _phoneNumber;
+        private string _phoneNr;
         private string _password;
         private string _passControl;
+        public bool KeepAlive => false;
 
         public string FirstName
         {
@@ -47,10 +51,10 @@ namespace HotelResFE.ViewModels
             get { return _adress; }
             set { SetProperty(ref _adress, value); }
         }
-        public string PhoneNumber
+        public string PhoneNr
         {
-            get { return _phoneNumber; }
-            set { SetProperty(ref _phoneNumber, value); }
+            get { return _phoneNr; }
+            set { SetProperty(ref _phoneNr, value); }
         }
         public string Password
         {
@@ -86,19 +90,19 @@ namespace HotelResFE.ViewModels
             user.LastName = _lastName;
             user.Email = _email;
             user.Adress = _adress;
-            user.PhoneNr = _phoneNumber;
+            user.PhoneNr = _phoneNr;
             user.Password = _password;
 
-            HttpStatusCode? r = await _userService.RegisterNewUserAsync(user);
+            LoginCreds creds = await _userService.RegisterNewUserAsync(user);
 
-            if(r == HttpStatusCode.OK)
+            if (creds != null)
             {
-                LoginCreds creds = new LoginCreds();
-                creds.Email = user.Email;
-                creds.Password = user.Password;
-                _eventAggregator.GetEvent<RegisteredEvent>().Publish(); //Kanske ska ta bort?
-                _eventAggregator.GetEvent<LoggedInEvent>().Publish();
+
+                _eventAggregator.GetEvent<RegisteredEvent>().Publish(creds); //Kanske ska ta bort?
+                
             }
+            else
+                MessageBox.Show("Something went horribly wrong..!");
         }
 
     }

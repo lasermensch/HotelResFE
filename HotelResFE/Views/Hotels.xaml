@@ -11,6 +11,52 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <Button Command="{Binding SortCommand}" CommandParameter="SortByPrice" Content="Sort by Price" />
+            <Button Command="{Binding SortCommand}" CommandParameter="SortByRating" Content="Sort by Rating" />
+            <Button Command="{Binding SortCommand}" CommandParameter="SortBySize" Content="Sort by Hotel size" />
+            
+        </StackPanel>
+        <ListView x:Name="LwvHotels" Grid.Column="1" ItemsSource="{Binding Hotels}" SelectedItem="{Binding SelectedHotel}" DisplayMemberPath="HotelName">
+            
+        </ListView>
+        <StackPanel Grid.Column="2">
+            <TextBlock FontSize="20" FontFamily="Segoe Script" Text="{Binding ElementName=LwvHotels, Path=SelectedItem.HotelName}"/>
+            <TextBlock Text="{Binding ElementName=LwvHotels, Path=SelectedItem.Rating, StringFormat=Rating: {0:F2}}"/>
+            <TextBlock Text="{Binding ElementName=LwvHotels, Path=SelectedItem.Adress, StringFormat=Adress: {0}}"/>
+            <TextBlock Text="{Binding ElementName=LwvHotels, Path=SelectedItem.PhoneNr, StringFormat=PhoneNr: {0}}"/>
+            <TextBlock Text="{Binding ElementName=LwvHotels, Path=SelectedItem.Email, StringFormat=Email: {0}}"/>
+            <TextBlock Text="{Binding ElementName=LwvHotels, Path=SelectedItem.Website, StringFormat=Website: {0}}"/>
+            <Button Content="Book a Room Now!!" Command="{Binding NavigateToHotelDetailsCommand}" />
+            <ListView ItemsSource="{Binding ElementName=LwvHotels, Path=SelectedItem.Images}" SelectedItem="{Binding SelectedImage}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListView.ItemContainerStyle> <!--För den skull att man inte vill kunna markera bilderna... -->
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <Image Source="{Binding Uri}" Width="180"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+        </StackPanel>
+    </Grid>
+</UserControl>
+
+
+
+<!--<Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
@@ -26,7 +72,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <TextBlock Text=""/>
+            <TextBlock Text="sdfdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsfsdfffffffffffsfsfd"/>
             <ListBox Grid.Row="1" ItemsSource="{Binding ElementName=LwvHotels, Path=SelectedItem.Images}" SelectedItem="{Binding SelectedImage}"  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -41,6 +87,4 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </Grid>
-    </Grid>
-</UserControl>
+        </Grid>-->

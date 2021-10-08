@@ -13,9 +13,14 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="1">
-            <TextBlock Text="Välj aktuella veckor för att se vilka rumsstorlekar är lediga"/>
+            <!--<TextBlock Text="Välj aktuella veckor för att se vilka rumsstorlekar är lediga"/>-->
+            <!--Vi tänker nog faktiskt bakvänt: Välj ett rum, se när rummen är lediga.-->
+            <RadioButton Content="Single Room" />
+            <RadioButton Content="Double Room"/>
+            <RadioButton Content="Suite"/>
+            
             <DatePicker Name="datePickerWithBlackoutDates"
-            DisplayDateStart="{Binding StartDate}"
+            DisplayDateStart="{Binding StartDate}" 
             DisplayDateEnd="{Binding EndDate}"
             SelectedDate="{Binding SelectedDate}">
                 <DatePicker.BlackoutDates>

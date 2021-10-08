@@ -38,8 +38,9 @@ namespace HotelResFE.DataServices
                 var response = await _client.PostAsync(new Uri($"{_baseUrl}/auth"), content);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-
-                    string token = response.Content.ToString();
+                    string respCont = await response.Content.ReadAsStringAsync();
+                    string token = respCont.Remove(0, 10);
+                    token = token.Remove(token.Length - 2, 2);
                     _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                     return token;
                 }
@@ -53,7 +54,7 @@ namespace HotelResFE.DataServices
             }
         }
 
-        public async Task<HttpStatusCode?> RegisterNewUserAsync(User user)
+        public async Task<LoginCreds> RegisterNewUserAsync(User user)
         {
             try
             {
@@ -64,10 +65,10 @@ namespace HotelResFE.DataServices
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = await _client.PostAsync(new Uri($"{_baseUrl}/users"), content);
 
-                if (response.StatusCode == HttpStatusCode.OK)
-                    await LoginAsync(creds);
+                //if (response.StatusCode == HttpStatusCode.OK)
+                //    await LoginAsync(creds);
 
-                return response.StatusCode;
+                return creds;
             }catch(Exception epicFail)
             {
                 Debug.WriteLine(epicFail.Message);
@@ -78,6 +79,8 @@ namespace HotelResFE.DataServices
         public async Task<User> GetUserAsync()
         {
 
+            if (_client.DefaultRequestHeaders.Authorization == null)
+                return null;
             try
             {
                 var response = await _client.GetAsync(new Uri($"{_baseUrl}/users/userfromtoken"));
@@ -87,8 +90,7 @@ namespace HotelResFE.DataServices
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    if (String.IsNullOrWhiteSpace(content))
-                    return null;
+                    
                     User u = JsonConvert.DeserializeObject<User>(content);
                     return u;
                 }
@@ -141,7 +143,7 @@ namespace HotelResFE.DataServices
         }
         public void LogOut()
         {
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "");
+            _client.DefaultRequestHeaders.Authorization = null;
             
         }
 

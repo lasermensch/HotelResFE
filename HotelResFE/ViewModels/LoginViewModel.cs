@@ -54,16 +54,18 @@ namespace HotelResFE.ViewModels
             _password = "";
 
             PostLoginCommand = new DelegateCommand<LoginCreds>(PostLogin, CanPostLogin);
-            //_eventAggregator.GetEvent<RegisteredEvent>().Subscribe();
+            _eventAggregator.GetEvent<RegisteredEvent>().Subscribe(PostLogin);
         }
 
        
 
-        private async void PostLogin(LoginCreds obj)
+        private async void PostLogin(LoginCreds creds)
         {
-            LoginCreds creds = new LoginCreds();
-            creds.Email = _email;
-            creds.Password = _password;
+            if (String.IsNullOrWhiteSpace(creds.Email) && String.IsNullOrWhiteSpace(creds.Password))
+            {
+                creds.Email = _email;
+                creds.Password = _password;
+            }
 
             string resp = await _userService.LoginAsync(creds);
 
