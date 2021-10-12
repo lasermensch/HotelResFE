@@ -10,6 +10,9 @@ namespace HotelResFE.DataServices
 {
     public static class SecurityService
     {
+
+        public static string Token { get; set; }
+
         private static string key = "q3t6w9z$C&E)H@Mc";
         public static string Garble(string secret)
         {

@@ -11,14 +11,16 @@
     <Grid>
         <StackPanel >
             <Label Content="FirstName"/>
-            <TextBox Text="{Binding User.FirstName}"/>
+            <TextBox Text="{Binding FirstName, Mode=TwoWay}"/>
             <Label Content="LastName"/>
-            <TextBox Text="{Binding User.LastName}"/>
+            <TextBox Text="{Binding LastName, Mode=TwoWay}"/>
+            <Label Content="Email"/>
+            <TextBox Text="{Binding Email, Mode=TwoWay}"/>
             <Label Content="Address"/>
-            <TextBox Text="{Binding User.Adress}"/>
+            <TextBox Text="{Binding Address, Mode=TwoWay}"/>
             <Label Content="Phone Number"/>
-            <TextBox Text="{Binding User.PhoneNr}"/>
-            
+            <TextBox Text="{Binding PhoneNr, Mode=TwoWay}"/>
+
             <Label Content="Password" />
             <TextBox Text="{Binding NewPassword}" FontFamily="pack://application:,,,/Resources/Fonts/#PassStar" Height="17.96">
                 <TextBox.CommandBindings>
@@ -36,15 +38,32 @@
                 </TextBox.CommandBindings>
             </TextBox>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Command="{Binding UpdateUserCommand}" Content="SaveChanges"/>
+                <Button Command="{Binding EditUserCommand}" Content="SaveChanges"/>
                 <Button Command="{Binding DeleteUserCommand}" Content="Delete Profile"/>
             </StackPanel>
             <StackPanel>
                 <Label Content="Your Reservations: " />
-                <ListView Name="LvwReservations" ItemsSource="{Binding User.Reservations}" SelectedItem="{Binding SelectedReservation}" DisplayMemberPath="HotelId" Height="75"/>
+                <ListView Name="LvwReservations" ItemsSource="{Binding Reservations}" SelectedItem="{Binding SelectedReservation}" Height="75">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock>
+                                    <Run Text="{Binding Room.Hotel.HotelName}"/>
+                                    <Run Text=":"/>
+                                    <Run Text="{Binding StartDate}"/>
+                                    <Run Text="->" />
+                                    <Run Text="{Binding EndDate}"/>
+                                </TextBlock>
+                                <!--<TextBlock Text="{Binding Room.Hotel.HotelName}">
+                                <TextBlock Text="{Binding StartDate.Date}" />
+                                <TextBlock Text="{Binding EndDate.Date}" />-->
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
                 <Button Content="Delete Reservation" Width="120" Command="{Binding DeleteReservationCommand}" CommandParameter="{Binding ElementName=LvwReservations, Path=SelectedItem.ReservationId}"/>
             </StackPanel>
         </StackPanel>
-        
+
     </Grid>
 </UserControl>

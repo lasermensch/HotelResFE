@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace HotelResFE.DataServices
 {
@@ -19,13 +21,18 @@ namespace HotelResFE.DataServices
         {
             _client = client;
             _baseURL = "https://localhost:44364/api";
+            
+
         }
 
         public async Task DeleteReservationAsync(Guid reservationId)
         {
             try
             {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SecurityService.Token);
+                Debug.WriteLine(_client.DefaultRequestHeaders.Authorization);
                 var response = await _client.DeleteAsync(new Uri($"{_baseURL}/reservations/{reservationId}"));
+                Debug.WriteLine(response.StatusCode);
             }
             catch(Exception epicFail)
             {
@@ -37,6 +44,7 @@ namespace HotelResFE.DataServices
         {
             try
             {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SecurityService.Token);
                 var response = await _client.GetAsync(new Uri($"{_baseURL}/reservations/{reservationId}"));
                 if(response.IsSuccessStatusCode)
                 {
@@ -55,6 +63,7 @@ namespace HotelResFE.DataServices
         {
             try
             {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SecurityService.Token);
                 var response = await _client.GetAsync(new Uri($"{_baseURL}/reservations"));
                 if(response.IsSuccessStatusCode)
                 {
@@ -76,6 +85,7 @@ namespace HotelResFE.DataServices
         {
             try
             {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SecurityService.Token);
                 var response = await _client.GetAsync(new Uri($"{_baseURL}/reservations/by-hotel-id-{hotelId}"));
 
                 if(response.IsSuccessStatusCode)
@@ -92,12 +102,15 @@ namespace HotelResFE.DataServices
 
         public async Task PostReservationAsync(Reservation reservation)
         {
+            
             try
             {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SecurityService.Token);
                 var json = JsonConvert.SerializeObject(reservation);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = await _client.PostAsync(new Uri($"{_baseURL}/reservations"), content);
-
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                    MessageBox.Show("Reservation was not successful. Try again later...");
             }catch(Exception epicFail)
             {
                 Debug.WriteLine(epicFail.Message);

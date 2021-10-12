@@ -88,7 +88,23 @@ namespace HotelResFE.ViewModels
         }
         public ObservableCollection<DateTime> DatesToBeEnabled
         {
-            get { return new ObservableCollection<DateTime>() { SelectedStartDate.Date.AddDays(7), SelectedStartDate.Date.AddDays(14)}; }
+            get
+            {
+                DateTime d1 = SelectedStartDate.Date.AddDays(7);
+                DateTime d2 = SelectedStartDate.Date.AddDays(14);
+                ObservableCollection<DateTime> dtbe = new ObservableCollection<DateTime>();
+                if (DatesToBeDisabled.Any(d => d.Date <= d1 && d.Date >= SelectedStartDate.Date)) //Om detta är sant innebär det att alla rum är upptagna någon av dagarna i bokningsperioden...
+                    return dtbe;
+                
+                dtbe.Add(d1);
+
+                if (DatesToBeDisabled.Any(d => d.Date <= d2 && d.Date >= d1))
+                    return dtbe;
+
+                dtbe.Add(d2);
+
+                return dtbe;
+            }
             set { SetProperty(ref _datesToBeEnabled, value); }
         }
         public bool ArrivalIsSet
@@ -96,7 +112,7 @@ namespace HotelResFE.ViewModels
             get { return SelectedStartDate >= StartDate; }
             
         }
-
+        
         public bool IncludeTransport
         {
             get { return _includeTransport; }
@@ -171,7 +187,8 @@ namespace HotelResFE.ViewModels
             //_includeAll = _includeBreakfast = _includeTransport = _includePool = false;
             
 
-            aggregator.GetEvent<SelectedHotelEvent>().Subscribe(LoadHotel);
+            _eventAggregator.GetEvent<SelectedHotelEvent>().Subscribe(LoadHotel);
+            _eventAggregator.GetEvent<ReservationMadeEvent>().Subscribe(LoadReservations);
 
             MakeReservationCommand = new DelegateCommand<Reservation>(MakeReservation);
 
@@ -186,16 +203,20 @@ namespace HotelResFE.ViewModels
             res.IncludeTransport = IncludeTransport;
             res.StartDate = SelectedStartDate;
             res.EndDate = SelectedEndDate;
-            res.Room = FindAvailableRoom();
-        }
-        private Room FindAvailableRoom()
-        {
-            Room r = new Room();
-            List<Room> rs = SelectedHotel.Rooms.Where(r => r.Size == SelectedSize).ToList();
+            res.RoomId = FindAvailableRoom();
 
-            r = rs.First(r => Reservations.Where(res => SelectedStartDate >= res.StartDate && SelectedStartDate <= res.EndDate && SelectedEndDate <= res.EndDate && SelectedEndDate >= res.StartDate).FirstOrDefault(res => res.RoomId == r.RoomId) == null);
+            _reserverationsService.PostReservationAsync(res);
+
+            _eventAggregator.GetEvent<ReservationMadeEvent>().Publish();
+        }
+        private Guid FindAvailableRoom()
+        {
+            Room room = new Room();
+            List<Room> rooms = SelectedHotel.Rooms.Where(r => r.Size == SelectedSize).ToList();
+            List<Reservation> ress = Reservations.Where(res => res.StartDate >= SelectedStartDate && res.StartDate <= SelectedEndDate || res.EndDate <= SelectedEndDate && res.EndDate >= SelectedStartDate).ToList();
+            room = rooms.First(r => ress.FirstOrDefault(res => res.RoomId == r.RoomId) == null);
             //Galenskaper! Needs work.
-            return r;
+            return room.RoomId;
         }
 
         private async void LoadReservations()

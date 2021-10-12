@@ -52,7 +52,8 @@ namespace HotelResFE.ViewModels
             NavigateToUserDetailsViewCommand = new DelegateCommand<string>(Navigate);
 
             _eventAggregator.GetEvent<LoggedInEvent>().Subscribe(IsLoggedIn);
-            _eventAggregator.GetEvent<LoggedOutEvent>().Subscribe(LogOut);
+            _eventAggregator.GetEvent<DeletedUserEvent>().Subscribe(LogOut);
+            
         }
 
         private void LogOut()

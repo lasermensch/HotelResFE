@@ -24,6 +24,7 @@ namespace HotelResFE.DataServices
         {
             _client = httpClient;
             _baseUrl = "https://localhost:44364/api";
+            
 
         }
 
@@ -31,17 +32,20 @@ namespace HotelResFE.DataServices
         {
             try
             {
+                
                 creds.Password = SecurityService.UnGarble(creds.Password);
                 string json = JsonConvert.SerializeObject(creds); //Kanske måste lägga in citationstecken i strängen.
 
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SecurityService.Token);
                 var response = await _client.PostAsync(new Uri($"{_baseUrl}/auth"), content);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     string respCont = await response.Content.ReadAsStringAsync();
                     string token = respCont.Remove(0, 10);
                     token = token.Remove(token.Length - 2, 2);
-                    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    SecurityService.Token = token;
+                    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SecurityService.Token);
                     return token;
                 }
 
@@ -63,13 +67,13 @@ namespace HotelResFE.DataServices
                 user.Password = SecurityService.UnGarble(user.Password);
                 var json = JsonConvert.SerializeObject(user);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SecurityService.Token);
                 var response = await _client.PostAsync(new Uri($"{_baseUrl}/users"), content);
 
-                //if (response.StatusCode == HttpStatusCode.OK)
-                //    await LoginAsync(creds);
 
                 return creds;
-            }catch(Exception epicFail)
+            }
+            catch(Exception epicFail)
             {
                 Debug.WriteLine(epicFail.Message);
                 return null;
@@ -83,6 +87,7 @@ namespace HotelResFE.DataServices
                 return null;
             try
             {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SecurityService.Token);
                 var response = await _client.GetAsync(new Uri($"{_baseUrl}/users/userfromtoken"));
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                     return null;
@@ -92,6 +97,7 @@ namespace HotelResFE.DataServices
                     var content = await response.Content.ReadAsStringAsync();
                     
                     User u = JsonConvert.DeserializeObject<User>(content);
+                    u.Password = SecurityService.Garble(u.Password);
                     return u;
                 }
             }
@@ -103,7 +109,7 @@ namespace HotelResFE.DataServices
             return new();
 
         }
-        public async Task<User> EditUser(User user) //Varför ska vi returnera en user?
+        public async Task EditUserAsync(User user) //Varför ska vi returnera en user?
         {
 
             try
@@ -111,17 +117,17 @@ namespace HotelResFE.DataServices
                 user.Password = SecurityService.UnGarble(user.Password);
                 string json = JsonConvert.SerializeObject(user);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SecurityService.Token);
                 var response = await _client.PutAsync(new Uri($"{_baseUrl}/users"), content);
 
-                if (response.StatusCode == HttpStatusCode.OK)
-                    return user;
+                
 
             }catch(Exception epicFail)
             {
                 Debug.WriteLine(epicFail.Message);
             }
 
-            return null;
+           
         }
 
         public async Task<HttpStatusCode?> DeleteUserAsync()
@@ -129,6 +135,7 @@ namespace HotelResFE.DataServices
             
             try
             {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SecurityService.Token);
                 var response = await _client.DeleteAsync(new Uri($"{_baseUrl}/users"));
                 return response.StatusCode;
 
@@ -143,7 +150,8 @@ namespace HotelResFE.DataServices
         }
         public void LogOut()
         {
-            _client.DefaultRequestHeaders.Authorization = null;
+            SecurityService.Token = null;
+            _client.DefaultRequestHeaders.Authorization = null; //Redundant
             
         }
 

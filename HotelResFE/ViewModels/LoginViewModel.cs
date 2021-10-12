@@ -55,6 +55,7 @@ namespace HotelResFE.ViewModels
 
             PostLoginCommand = new DelegateCommand<LoginCreds>(PostLogin, CanPostLogin);
             _eventAggregator.GetEvent<RegisteredEvent>().Subscribe(PostLogin);
+            //_eventAggregator.GetEvent<LoggedOutEvent>().Subscribe();
         }
 
        
