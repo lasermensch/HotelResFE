@@ -61,6 +61,8 @@ namespace HotelResFE.ViewModels
 
         private async void PostLogin(LoginCreds creds)
         {
+            if (creds == null)
+                creds = new();
             if (String.IsNullOrWhiteSpace(creds.Email) && String.IsNullOrWhiteSpace(creds.Password))
             {
                 creds.Email = _email;

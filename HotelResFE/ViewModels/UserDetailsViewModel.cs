@@ -18,6 +18,7 @@ namespace HotelResFE.ViewModels
         private User _user;
         private IEventAggregator _eventAggregator;
         private IUserService _userService;
+        private IReservationsService _reservationsService;
         private string _newPassword;
         private string _passControl;
 
@@ -39,18 +40,24 @@ namespace HotelResFE.ViewModels
 
         public DelegateCommand<User> DeleteUserCommand { get; private set; }
         public DelegateCommand<User> UpdateUserCommand { get; private set; }
-
+        public DelegateCommand<Guid> DeleteReservationCommand { get; private set; }
         
 
-        public UserDetailsViewModel(IEventAggregator eventAggregator, IUserService userService)
+        public UserDetailsViewModel(IEventAggregator eventAggregator, IUserService userService, IReservationsService reservationsService)
         {
             _eventAggregator = eventAggregator;
             _userService = userService;
+            _reservationsService = reservationsService;
             _user = new();
             UpdateUserCommand = new DelegateCommand<User>(UpdateUser);
             DeleteUserCommand = new DelegateCommand<User>(DeleteUser);
-
+            DeleteReservationCommand = new DelegateCommand<Guid>(DeleteReservation);
             _eventAggregator.GetEvent<LoggedInEvent>().Subscribe(LoadUser);
+        }
+
+        private async void DeleteReservation(Guid reservationId)
+        {
+            await _reservationsService.DeleteReservationAsync(reservationId);
         }
 
         private async void DeleteUser(User user)

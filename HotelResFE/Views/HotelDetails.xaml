@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HotelResFE.Views"
+             xmlns:ViewModels="clr-namespace:HotelResFE.ViewModels"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             >
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -15,23 +20,81 @@
         <StackPanel Grid.Column="1">
             <!--<TextBlock Text="Välj aktuella veckor för att se vilka rumsstorlekar är lediga"/>-->
             <!--Vi tänker nog faktiskt bakvänt: Välj ett rum, se när rummen är lediga.-->
-            <RadioButton Content="Single Room" />
-            <RadioButton Content="Double Room"/>
-            <RadioButton Content="Suite"/>
-            
-            <DatePicker Name="datePickerWithBlackoutDates"
-            DisplayDateStart="{Binding StartDate}" 
-            DisplayDateEnd="{Binding EndDate}"
-            SelectedDate="{Binding SelectedDate}">
-                <DatePicker.BlackoutDates>
-                    <!--<CalendarDateRange Start="8/1/09" End="8/2/09"/>
-                    <CalendarDateRange Start="8/8/09" End="8/9/09"/>
-                    <CalendarDateRange Start="8/15/09" End="8/16/09"/>
-                    <CalendarDateRange Start="8/22/09" End="8/23/09"/>
-                    <CalendarDateRange Start="8/29/09" End="8/30/09"/>-->
-                </DatePicker.BlackoutDates>
+            <!--<RadioButton GroupName="Rbns" Content="Single Room" IsChecked="{Binding RbnSingleRoomChecked}"/>
+            <RadioButton GroupName="Rbns" Content="Double Room" IsChecked="{Binding RbnDoubleRoomChecked}"/>
+            <RadioButton GroupName="Rbns" Content="Suite" IsChecked="{Binding RbnSuiteChecked}" />-->
+
+            <RadioButton Content="Single" GroupName="Rbns" IsChecked="{Binding ValueAs0, Mode=TwoWay}" />
+            <RadioButton Content="Double" GroupName="Rbns" IsChecked="{Binding ValueAs1, Mode=TwoWay}" />
+            <RadioButton Content="Suite" GroupName="Rbns" IsChecked="{Binding ValueAs2, Mode=TwoWay}" />
+            <Label Content="Date of arrival: "/>
+            <DatePicker DisplayDateStart="{Binding StartDate}"
+                        DisplayDateEnd="{Binding EndDate}"
+                        
+                        SelectedDate="{Binding SelectedStartDate, Mode=OneWayToSource}">
+                <DatePicker.CalendarStyle>
+                    <Style TargetType="Calendar">
+                        <Setter Property="CalendarDayButtonStyle">
+                            <Setter.Value>
+                                <Style TargetType="CalendarDayButton">
+                                    <Style.Resources>
+                                        <ViewModels:DateTimesToBoolConverter x:Key="DateTimesToBoolConverter"/>
+                                    </Style.Resources>
+                                    <Setter Property="IsHitTestVisible" Value="True"/>
+                                    <Setter Property="Opacity" Value="1"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Value="True">
+                                            <DataTrigger.Binding>
+                                                <MultiBinding Converter="{StaticResource DateTimesToBoolConverter}">
+                                                    <Binding Path="DataContext.DatesToBeDisabled" RelativeSource="{RelativeSource AncestorType=DatePicker}" />
+                                                    <Binding Path="." />
+                                                </MultiBinding>
+                                            </DataTrigger.Binding>
+                                            <Setter Property="IsHitTestVisible" Value="false" />
+                                            <Setter Property="Opacity" Value="0"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DatePicker.CalendarStyle>
+                
             </DatePicker>
-            <ComboBox ItemsSource="{Binding RoomSize}"/>
+            <Label Content="Date of return: "/>
+            <DatePicker DisplayDateStart="{Binding StartDate}"
+                DisplayDateEnd="{Binding EndDate}"
+                IsEnabled="{Binding ArrivalIsSet}"        
+                SelectedDate="{Binding SelectedEndDate, Mode=TwoWay}">
+                <DatePicker.CalendarStyle>
+                    <Style TargetType="{x:Type Calendar}">
+                        <Setter Property="CalendarDayButtonStyle">
+                            <Setter.Value>
+                                <Style TargetType="{x:Type CalendarDayButton}">
+                                    <Style.Resources>
+                                        <ViewModels:DateTimesToBoolConverter x:Key="DateTimesToBoolConverter"/>
+                                    </Style.Resources>
+                                    <Setter Property="IsHitTestVisible" Value="False"/>
+                                    <Setter Property="Opacity" Value="0"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Value="True">
+                                            <DataTrigger.Binding>
+                                                <MultiBinding Converter="{StaticResource DateTimesToBoolConverter}">
+                                                    <Binding Path="DataContext.DatesToBeEnabled" RelativeSource="{RelativeSource AncestorType={x:Type DatePicker}}" />
+                                                    <Binding Path="." />
+                                                </MultiBinding>
+                                            </DataTrigger.Binding>
+                                            <Setter Property="IsHitTestVisible" Value="True" />
+                                            <Setter Property="Opacity" Value="1"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DatePicker.CalendarStyle>
+
+            </DatePicker>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Label Content="Transportation"/>
                 <CheckBox IsChecked="{Binding IncludeTransport}" />
@@ -42,7 +105,9 @@
                 <Label Content="All Inclusive"/>
                 <CheckBox IsChecked="{Binding IncludeAll}"/>
             </StackPanel>
+            <Button  Content="Make Reservation"  Command="{Binding MakeReservationCommand}"/>
+            
         </StackPanel>
-        
+
     </Grid>
 </UserControl>

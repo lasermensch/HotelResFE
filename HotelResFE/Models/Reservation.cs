@@ -17,8 +17,14 @@ namespace HotelResFE.Models
         public DateTime StartDate { get; set; }
         
         public DateTime EndDate { get; set; }
+
+        public bool IncludeTransport { get; set; }
         
-        public byte Addons { get; set; }
+        public bool IncludePool { get; set; }
+        
+        public bool IncludeBreakfast { get; set; }
+        
+        public bool IncludeAll { get; set; }
 
         //Navprops
         public User User { get; set; }

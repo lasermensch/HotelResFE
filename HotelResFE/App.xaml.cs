@@ -30,6 +30,7 @@ public partial class App : PrismApplication
         {
             containerRegistry.RegisterScoped<IUserService, UserService>();
             containerRegistry.RegisterScoped<IHotelsService, HotelsService>();
+            containerRegistry.RegisterScoped<IReservationsService, ReservationsService>();
 
             containerRegistry.RegisterForNavigation<Login>();
             containerRegistry.RegisterForNavigation<Hotels>();

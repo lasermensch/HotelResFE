@@ -1,4 +1,5 @@
 ﻿using HotelResFE.DataServices;
+using HotelResFE.Events;
 using HotelResFE.Models;
 using HotelResFE.Views;
 using Prism.Commands;
@@ -24,8 +25,7 @@ namespace HotelResFE.ViewModels
         private ObservableCollection<HotelImage> _images;
         private IEventAggregator _aggregator;
         private IHotelsService _service;
-
-
+        private IRegionManager _regionManager;
 
         public ObservableCollection<Hotel> Hotels
         {
@@ -35,7 +35,7 @@ namespace HotelResFE.ViewModels
         public Hotel SelectedHotel
         {
             get { return _selectedHotel; }
-            set { SetProperty(ref _selectedHotel, value); }
+            set { SetProperty(ref _selectedHotel, value); _aggregator.GetEvent<SelectedHotelEvent>().Publish(value); }
         }
         public HotelImage SelecedImage
         {
@@ -57,10 +57,11 @@ namespace HotelResFE.ViewModels
         public DelegateCommand<string> SortCommand { get; private set; }
         public DelegateCommand NavigateToHotelDetailsCommand { get; private set; }
 
-        public HotelsViewModel(IEventAggregator aggregator, IHotelsService service)
+        public HotelsViewModel(IEventAggregator aggregator, IHotelsService service, IRegionManager regionManager)
         {
             _aggregator = aggregator;
             _service = service;
+            _regionManager = regionManager;
             _hotels = new();
             _images = new();
             _selectedHotel = new();
@@ -72,7 +73,7 @@ namespace HotelResFE.ViewModels
 
         private void NavigateToHotelDetails()
         {
-            
+            _regionManager.RequestNavigate("ContentRegion", "HotelDetails");
         }
 
         private void SortHotels(string sortingparam)
