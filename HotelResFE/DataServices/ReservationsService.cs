@@ -27,11 +27,28 @@ namespace HotelResFE.DataServices
             {
                 var response = await _client.DeleteAsync(new Uri($"{_baseURL}/reservations/{reservationId}"));
             }
+            catch(Exception epicFail)
+            {
+                Debug.WriteLine(epicFail.Message);
+            }
         }
 
         public async Task<Reservation> GetReservationAsync(Guid reservationId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var response = await _client.GetAsync(new Uri($"{_baseURL}/reservations/{reservationId}"));
+                if(response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    Reservation r = JsonConvert.DeserializeObject<Reservation>(content);
+                    return r;
+                }
+            }catch(Exception epicFail)
+            {
+                Debug.WriteLine(epicFail.Message);
+            }
+            return null;
         }
 
         public async Task<IEnumerable<Reservation>> GetReservationsAsync()

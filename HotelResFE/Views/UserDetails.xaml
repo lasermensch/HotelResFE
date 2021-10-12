@@ -41,7 +41,7 @@
             </StackPanel>
             <StackPanel>
                 <Label Content="Your Reservations: " />
-                <ListView Name="LvwReservations" ItemsSource="{Binding User.Reservations}" SelectedItem="{Binding SelectedReservation}" DisplayMemberPath="{}" Height="75"/>
+                <ListView Name="LvwReservations" ItemsSource="{Binding User.Reservations}" SelectedItem="{Binding SelectedReservation}" DisplayMemberPath="HotelId" Height="75"/>
                 <Button Content="Delete Reservation" Width="120" Command="{Binding DeleteReservationCommand}" CommandParameter="{Binding ElementName=LvwReservations, Path=SelectedItem.ReservationId}"/>
             </StackPanel>
         </StackPanel>

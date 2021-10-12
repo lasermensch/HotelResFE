@@ -13,7 +13,7 @@ namespace HotelResFE.DataServices
         public Task<IEnumerable<Reservation>> GetReservationsByHotelIdAsync(Guid hotelId);
         public Task<Reservation> GetReservationAsync(Guid reservationId);
 
-        public Task PostReservationAsync();
+        public Task PostReservationAsync(Reservation reservation);
         public Task DeleteReservationAsync(Guid reservationId);
     }
 }
