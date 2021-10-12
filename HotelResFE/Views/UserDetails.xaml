@@ -49,14 +49,15 @@
                             <StackPanel>
                                 <TextBlock>
                                     <Run Text="{Binding Room.Hotel.HotelName}"/>
-                                    <Run Text=":"/>
+                                    <Run Text=", "/>
+                                    <Run Text="{Binding Room.RoomSize}"/>
+                                    <Run Text="Cost: "/>
+                                    <Run Text="{Binding TotalAmount}"/>
+                                    <Run Text=" "/>
                                     <Run Text="{Binding StartDate}"/>
                                     <Run Text="->" />
                                     <Run Text="{Binding EndDate}"/>
                                 </TextBlock>
-                                <!--<TextBlock Text="{Binding Room.Hotel.HotelName}">
-                                <TextBlock Text="{Binding StartDate.Date}" />
-                                <TextBlock Text="{Binding EndDate.Date}" />-->
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>

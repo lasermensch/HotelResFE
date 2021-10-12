@@ -105,6 +105,8 @@
                 <Label Content="All Inclusive"/>
                 <CheckBox IsChecked="{Binding IncludeAll}"/>
             </StackPanel>
+            <Label Content="Total Amount: " />
+            <TextBlock Text="{Binding TotalAmount}"/>
             <Button  Content="Make Reservation"  Command="{Binding MakeReservationCommand}"/>
             
         </StackPanel>

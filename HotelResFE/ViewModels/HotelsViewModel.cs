@@ -82,7 +82,7 @@ namespace HotelResFE.ViewModels
             switch(sortingparam)
             {
                 case "SortByPrice":
-                    slist = Hotels.OrderBy(hotel => hotel.Rooms.Min(room => room.Price)).ToList();
+                    slist = Hotels.OrderBy(hotel => hotel.PriceSingleRoom).ToList();
                     break;
                 case "SortByRating":
                     slist = Hotels.OrderBy(hotel => hotel.Rating).ToList();

@@ -7,13 +7,13 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:HotelResFE.Views"
         
-        Title="{Binding Title}" Height="450" Width="800">
+        Title="{Binding Title}" Height="700" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
             <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
-        <Button Content="Hotels" Command="{Binding NavigateToHotelsViewCommand}" CommandParameter="Hotels" HorizontalAlignment="Left" Background="#00DDDDDD" BorderBrush="#00707070"/>
+        <Button Content="Hotels" Visibility="{Binding ToggleUserpageBtnVisibility}" Command="{Binding NavigateToHotelsViewCommand}" CommandParameter="Hotels" HorizontalAlignment="Left" Background="#00DDDDDD" BorderBrush="#00707070"/>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
             
             <Button Width="60" Command="{Binding NavigateToUserDetailsViewCommand}" CommandParameter="UserDetails" Visibility="{Binding ToggleUserpageBtnVisibility}" ClipToBounds="True" BorderBrush="#00707070" Background="Transparent">

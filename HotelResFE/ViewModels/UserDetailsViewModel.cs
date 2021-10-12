@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -68,6 +69,21 @@ namespace HotelResFE.ViewModels
             get { return _selectedReservation; }
             set { SetProperty(ref _selectedReservation, value); }
         }
+        public string RoomSize
+        {
+            get
+            {
+                string size = "";
+                if (SelectedReservation.Room.Size == 0)
+                    size = "Single Room";
+                else if (SelectedReservation.Room.Size == 1)
+                    size = "Double Room";
+                else if (SelectedReservation.Room.Size == 2)
+                    size = "Suite";
+
+                return size;
+            }
+        }
         public ObservableCollection<Reservation> Reservations
         { 
             get { return _reservations; }
@@ -82,6 +98,7 @@ namespace HotelResFE.ViewModels
         {
             set { SetProperty(ref _passControl, SecurityService.Garble(value)); }
         }
+
         
 
         public DelegateCommand<User> DeleteUserCommand { get; private set; }

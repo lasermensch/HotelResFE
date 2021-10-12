@@ -7,6 +7,7 @@ using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -29,16 +30,20 @@ namespace HotelResFE.ViewModels
         private DateTime _startDate;
         private DateTime _endDate;
         private DateTime _selectedStartDate;
+        private DateTime _selectedEndDate;
         private ObservableCollection<DateTime> _datesToBeDisabled;
+        private ObservableCollection<DateTime> _datesToBeEnabled;
 
         private bool _includeTransport;
         private bool _includePool;
         private bool _includeBreakfast;
         private bool _includeAll;
 
+        private int _selectedSize;
+        
 
-        
-        
+
+
         public Hotel SelectedHotel
         {
             get { return _selectedHotel; }
@@ -116,27 +121,26 @@ namespace HotelResFE.ViewModels
         public bool IncludeTransport
         {
             get { return _includeTransport; }
-            set { SetProperty(ref _includeTransport, value); }
+            set { SetProperty(ref _includeTransport, value); RaisePropertyChanged(nameof(TotalAmount)); }
         }
         public bool IncludePool
         {
             get { return _includePool; }
-            set { SetProperty(ref _includePool, value); }
+            set { SetProperty(ref _includePool, value); RaisePropertyChanged(nameof(TotalAmount)); }
         }
         public bool IncludeBreakFast
         {
             get { return _includeBreakfast; }
-            set { SetProperty(ref _includeBreakfast, value); }
+            set { SetProperty(ref _includeBreakfast, value); RaisePropertyChanged(nameof(TotalAmount)); }
         }
         public bool IncludeAll
         {
             get { return _includeAll; }
-            set { SetProperty(ref _includeAll, value); }
+            set { SetProperty(ref _includeAll, value); RaisePropertyChanged(nameof(TotalAmount)); }
         }
 
-        private int _selectedSize;
-        private DateTime _selectedEndDate;
-        private ObservableCollection<DateTime> _datesToBeEnabled;
+
+        
 
         public int SelectedSize
         {
@@ -147,6 +151,7 @@ namespace HotelResFE.ViewModels
                 RaisePropertyChanged("ValueAs0");
                 RaisePropertyChanged("ValueAs1");
                 RaisePropertyChanged("ValueAs2");
+                RaisePropertyChanged(nameof(TotalAmount));
                 LoadUnAvailableDates();
             }
         }
@@ -167,6 +172,11 @@ namespace HotelResFE.ViewModels
         }
 
         public DelegateCommand<Reservation> MakeReservationCommand { get; private set; }
+        public int TotalAmount 
+        { 
+            get { return CalculateTotalAmount(); } 
+            
+        }
 
         public HotelDetailsViewModel(IEventAggregator aggregator, IHotelsService hotelsService, IReservationsService reservationsService)
         {
@@ -183,9 +193,6 @@ namespace HotelResFE.ViewModels
             
             _datesToBeDisabled = new();
             _selectedSize = 1;
-
-            //_includeAll = _includeBreakfast = _includeTransport = _includePool = false;
-            
 
             _eventAggregator.GetEvent<SelectedHotelEvent>().Subscribe(LoadHotel);
             _eventAggregator.GetEvent<ReservationMadeEvent>().Subscribe(LoadReservations);
@@ -204,7 +211,7 @@ namespace HotelResFE.ViewModels
             res.StartDate = SelectedStartDate;
             res.EndDate = SelectedEndDate;
             res.RoomId = FindAvailableRoom();
-
+            res.TotalAmount = CalculateTotalAmount();
             _reserverationsService.PostReservationAsync(res);
 
             _eventAggregator.GetEvent<ReservationMadeEvent>().Publish();
@@ -215,8 +222,29 @@ namespace HotelResFE.ViewModels
             List<Room> rooms = SelectedHotel.Rooms.Where(r => r.Size == SelectedSize).ToList();
             List<Reservation> ress = Reservations.Where(res => res.StartDate >= SelectedStartDate && res.StartDate <= SelectedEndDate || res.EndDate <= SelectedEndDate && res.EndDate >= SelectedStartDate).ToList();
             room = rooms.First(r => ress.FirstOrDefault(res => res.RoomId == r.RoomId) == null);
-            //Galenskaper! Needs work.
+            
             return room.RoomId;
+        }
+        
+        private int CalculateTotalAmount()
+        {
+            int totam = 0;
+            if (SelectedSize == 0)
+                totam += SelectedHotel.PriceSingleRoom;
+            else if (SelectedSize == 1)
+                totam += SelectedHotel.PriceDoubleRoom;
+            else if (SelectedSize == 2)
+                totam += SelectedHotel.PriceSuite;
+
+            if (IncludeAll)
+                totam += SelectedHotel.PriceAllInclusive;
+            if (IncludeBreakFast)
+                totam += SelectedHotel.PriceBreakfast;
+            if (IncludeTransport)
+                totam += SelectedHotel.PriceTransport;
+            if (IncludePool)
+                totam += SelectedHotel.PricePool;
+            return totam;
         }
 
         private async void LoadReservations()
@@ -243,12 +271,8 @@ namespace HotelResFE.ViewModels
 
             _datesToBeDisabled.Clear();
             
-            
-
-            
-
             List<Reservation> reservationsBySize = Reservations.Where(r => r.Room.Size == SelectedSize).ToList();
-            List<Room> roomsBySize = SelectedHotel.Rooms.Where(r => r.Size == SelectedSize).ToList();
+            List<Room> roomsBySize = SelectedHotel.Rooms.Where(r => ((int)r.Size) == SelectedSize).ToList();
             DatesToBeDisabled = new();
             for (DateTime d = StartDate; d <= EndDate; d = d.AddDays(1))
             {
@@ -274,6 +298,7 @@ namespace HotelResFE.ViewModels
         }
     }
 
+    //Denna placeras i denna fil av "säkerhetsskäl"
     public class DateTimesToBoolConverter : IMultiValueConverter
     {
         
