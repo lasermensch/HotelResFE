@@ -28,6 +28,7 @@ namespace HotelResFE.ViewModels
         public DelegateCommand<string> NavigateToRegisterViewCommand { get; private set; }
         public DelegateCommand<string> NavigateToUserDetailsViewCommand { get; private set; }
 
+        public string Title { get; } = "HotelResFE";
         public Visibility ToggleUserpageBtnVisibility
         {
             get { return _isLoggedIn ? Visibility.Visible : Visibility.Hidden; }
