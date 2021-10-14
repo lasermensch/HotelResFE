@@ -42,8 +42,6 @@ namespace HotelResFE.ViewModels
         private int _selectedSize;
         
 
-
-
         public Hotel SelectedHotel
         {
             get { return _selectedHotel; }
@@ -76,7 +74,7 @@ namespace HotelResFE.ViewModels
             set 
             { 
                 SetProperty(ref _selectedStartDate, value); 
-                RaisePropertyChanged(nameof(DatesToBeEnabled));
+                RaisePropertyChanged(nameof(DatesToBeEnabled)); //Går att generalisera mer.
                 RaisePropertyChanged(nameof(ArrivalIsSet));
                 RaisePropertyChanged(nameof(SelectedEndDate));
             }
