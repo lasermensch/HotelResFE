@@ -54,9 +54,9 @@
                                     <Run Text="Cost: "/>
                                     <Run Text="{Binding TotalAmount}"/>
                                     <Run Text=" "/>
-                                    <Run Text="{Binding StartDate}"/>
+                                    <Run Text="{Binding StartDate.Date, Mode=OneWay}"/>
                                     <Run Text="->" />
-                                    <Run Text="{Binding EndDate}"/>
+                                    <Run Text="{Binding EndDate.Date, Mode=OneWay}"/>
                                 </TextBlock>
                             </StackPanel>
                         </DataTemplate>
