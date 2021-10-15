@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace HotelResFE.DataServices
 {
-    public static class SecurityService
+    public static class SecurityService //Denna statiska klass ligger under Dataservice bara på grund av namnet och för att jag inte hann implementera en ordentlig klass för att hantera 
+                                        //säkerhet och http-klient etc. Den är lättare att hitta här.
     {
 
         public static string Token { get; set; }
